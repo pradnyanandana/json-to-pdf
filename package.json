@@ -1,11 +1,14 @@
 {
   "private": true,
+  "homepage": "https://pradnyanandana.github.io/json-to-pdf",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "deploy": "gh-pages -d .next/server/pages"
   },
   "dependencies": {
+    "gh-pages": "^5.0.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
