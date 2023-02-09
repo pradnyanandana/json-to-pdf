@@ -22,6 +22,9 @@ export default function Home() {
                     <h3>JSON Editor</h3>
                     <Editor height="20rem" defaultLanguage="json" theme="vs-dark" />
                 </section>
+                <section className="configure">
+                    <h3>Configure</h3>
+                </section>
             </main>
 
             <footer>
