@@ -1,8 +1,31 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Editor from "@monaco-editor/react";
+import { useState } from "react";
 
 export default function Home() {
+    const [json, setJSON] = useState();
+    const [valid, setValid] = useState(true);
+
+    const handleFileChange = (e) => {
+        const reader = new FileReader();
+
+        if (e.target.files) {
+            const file = e.target.files[0];
+            reader.readAsText(file, "UTF-8");
+
+            reader.onload = (evt) => {
+                try {
+                    JSON.parse(evt.target.result);
+                    setValid(true);
+                    setJSON(evt.target.result);
+                } catch (e) {
+                    setValid(false);
+                }
+            };
+        }
+    };
+
     return (
         <div className={styles.container}>
             <Head>
@@ -16,14 +39,19 @@ export default function Home() {
                 </section>
                 <section className="file-form">
                     <h3>Select File</h3>
-                    <input type="file" id="myFile" name="filename" accept="application/json"></input>
+                    <input type="file" id="myFile" name="filename" accept="application/json" onChange={handleFileChange}></input>
+                    {!valid && <p className="warning">Not a valid JSON</p>}
                 </section>
                 <section className="json-editor">
                     <h3>JSON Editor</h3>
-                    <Editor height="20rem" defaultLanguage="json" theme="vs-dark" />
+                    <Editor height="20rem" defaultLanguage="json" theme="vs-dark" value={json} />
                 </section>
                 <section className="configure">
                     <h3>Configure</h3>
+                </section>
+                <section className="generate">
+                    <h3>Generate</h3>
+                    <button>Generate PDF</button>
                 </section>
             </main>
 
@@ -72,6 +100,18 @@ export default function Home() {
                 }
                 section {
                     width: 100%;
+                }
+                button {
+                    padding: 0.5rem 1rem;
+                    font-weight: bold;
+                    color: #fff;
+                    background-color: #000;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                }
+                p.warning {
+                    color: #ff0000;
                 }
                 .site-title {
                     text-align: center;
