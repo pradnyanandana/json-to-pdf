@@ -5,10 +5,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deploy": "gh-pages -d .next/server/pages"
+    "export": "next export",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
     "gh-pages": "^5.0.0",
+    "monaco-editor": "^0.35.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
