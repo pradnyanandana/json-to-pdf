@@ -1,9 +1,14 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import styles from "../styles/Home.module.css";
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
 
-export default function Home() {
+const PDFViewer = dynamic(() => import("./pdf"), {
+    ssr: false,
+});
+
+const Home = () => {
     const [json, setJSON] = useState();
     const [valid, setValid] = useState(true);
 
@@ -48,9 +53,14 @@ export default function Home() {
                 </section>
                 <section className="configure">
                     <h3>Configure</h3>
+                    <div className="form-input">
+                        <label>Document Name</label>
+                        <input type="text"></input>
+                    </div>
                 </section>
                 <section className="generate">
                     <h3>Generate</h3>
+                    <PDFViewer />
                     <button>Generate PDF</button>
                 </section>
             </main>
@@ -119,6 +129,21 @@ export default function Home() {
                 .json-editor pre {
                     width: 100%;
                 }
+                .configure .form-input {
+                    display: flex;
+                    gap: 2rem;
+                }
+                .configure .form-input label {
+                    flex: 0 0 20%;
+                }
+                .generate iframe {
+                    display: block;
+                    width: 100%;
+                }
+                .generate button {
+                    display: block;
+                    margin-top: 1rem;
+                }
             `}</style>
 
             <style jsx global>{`
@@ -134,4 +159,6 @@ export default function Home() {
             `}</style>
         </div>
     );
-}
+};
+
+export default Home;
