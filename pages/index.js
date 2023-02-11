@@ -1,16 +1,16 @@
 import Head from "next/head";
-import dynamic from "next/dynamic";
 import styles from "../styles/Home.module.css";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
-
-const PDFViewer = dynamic(() => import("./pdf"), {
-    ssr: false,
-});
+import { useRef, useState } from "react";
+import PDFViewer from "./pdf";
+import ReactToPrint from "react-to-print";
 
 const Home = () => {
     const [json, setJSON] = useState();
     const [valid, setValid] = useState(true);
+    const [logo, setLogo] = useState(false);
+
+    let printComponentRef = useRef();
 
     const handleFileChange = (e) => {
         const reader = new FileReader();
@@ -28,6 +28,29 @@ const Home = () => {
                     setValid(false);
                 }
             };
+        }
+    };
+
+    const handleLogoChange = (e) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                setLogo(e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const editorOnChange = (value) => {
+        try {
+            JSON.parse(value);
+            setValid(true);
+            setJSON(value);
+        } catch (e) {
+            setValid(false);
         }
     };
 
@@ -49,7 +72,7 @@ const Home = () => {
                 </section>
                 <section className="json-editor">
                     <h3>JSON Editor</h3>
-                    <Editor height="20rem" defaultLanguage="json" theme="vs-dark" value={json} />
+                    <Editor height="20rem" defaultLanguage="json" theme="vs-dark" value={json} onChange={editorOnChange} />
                 </section>
                 <section className="configure">
                     <h3>Configure</h3>
@@ -57,11 +80,15 @@ const Home = () => {
                         <label>Document Name</label>
                         <input type="text"></input>
                     </div>
+                    <div className="form-input">
+                        <label>Logo</label>
+                        <input type="file" id="logo" name="logo" accept="image/png,image/jpeg" onChange={handleLogoChange}></input>
+                    </div>
                 </section>
                 <section className="generate">
                     <h3>Generate</h3>
-                    <PDFViewer />
-                    <button>Generate PDF</button>
+                    <PDFViewer printRef={(el) => (printComponentRef = el)} dataJSON={json} logo={logo} />
+                    {json ? <ReactToPrint trigger={() => <button>Generate PDF</button>} content={() => printComponentRef} /> : <button>Generate PDF</button>}
                 </section>
             </main>
 
@@ -132,6 +159,9 @@ const Home = () => {
                 .configure .form-input {
                     display: flex;
                     gap: 2rem;
+                }
+                .configure .form-input:not(:last-child) {
+                    margin-bottom: 1rem;
                 }
                 .configure .form-input label {
                     flex: 0 0 20%;
