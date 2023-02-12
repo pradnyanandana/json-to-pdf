@@ -8,7 +8,7 @@ import ReactToPrint from "react-to-print";
 const Home = () => {
     const [json, setJSON] = useState();
     const [valid, setValid] = useState(true);
-    const [logo, setLogo] = useState(false);
+    const [settings, setSettings] = useState({});
 
     let printComponentRef = useRef();
 
@@ -37,7 +37,7 @@ const Home = () => {
             const reader = new FileReader();
 
             reader.onload = (e) => {
-                setLogo(e.target.result);
+                setSettings({ ...settings, logo: e.target.result });
             };
 
             reader.readAsDataURL(file);
@@ -87,7 +87,7 @@ const Home = () => {
                 </section>
                 <section className="generate">
                     <h3>Generate</h3>
-                    <PDFViewer printRef={(el) => (printComponentRef = el)} dataJSON={json} logo={logo} />
+                    <PDFViewer printRef={(el) => (printComponentRef = el)} dataJSON={json} settings={settings} />
                     {json ? <ReactToPrint trigger={() => <button>Generate PDF</button>} content={() => printComponentRef} /> : <button>Generate PDF</button>}
                 </section>
             </main>

@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
-const PDFViewer = ({ dataJSON, logo, printRef }) => {
+const PDFViewer = ({ dataJSON, settings, printRef }) => {
     const jsonObject = dataJSON ? JSON.parse(dataJSON) : {};
 
     return (
@@ -10,8 +10,8 @@ const PDFViewer = ({ dataJSON, logo, printRef }) => {
                     <div className="pdf-letter" ref={printRef}>
                         <div className="header">
                             <div className="logo">
-                                {logo ? (
-                                    <img src={logo}></img>
+                                {settings.logo ? (
+                                    <img src={settings.logo}></img>
                                 ) : (
                                     <svg id="logo-45" className="gradient" width="160" height="32" viewBox="0 0 160 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M48.0728 24.2381V7.95015H51.1442V21.4459H58.5901V24.2381H48.0728Z" fill="#3A5088" className="cneutral"></path>{" "}
@@ -52,10 +52,10 @@ const PDFViewer = ({ dataJSON, logo, printRef }) => {
                                         <path d="M0.00158691 15.5127C0.00158691 6.94524 6.94683 0 15.5142 0C16.8556 0 18.1572 0.170246 19.3987 0.490323C16.7348 1.17657 14.2774 2.56535 12.2991 4.54357C9.38992 7.45273 7.75557 11.3985 7.75557 15.5127H0.00158691Z" fill="#73E5E2" className="ccustom"></path>{" "}
                                         <defs>
                                             <linearGradient id="paint0_linear_1422_656" x1="38.7809" y1="7.75634" x2="7.75552" y2="7.75634" gradientUnits="userSpaceOnUse">
-                                                <stop className="ccustom" stop-color="#73E5E2"></stop> <stop className="ccompli1" offset="1" stop-color="#394F87"></stop>
+                                                <stop className="ccustom" stopColor="#73E5E2"></stop> <stop className="ccompli1" offset="1" stopColor="#394F87"></stop>
                                             </linearGradient>
                                             <linearGradient id="paint1_linear_1422_656" x1="1.01712e-06" y1="23.269" x2="31.0254" y2="23.269" gradientUnits="userSpaceOnUse">
-                                                <stop className="ccompli1" stop-color="#FBDC8E"></stop> <stop className="ccompli2" offset="1" stop-color="#FB958E"></stop>
+                                                <stop className="ccompli1" stopColor="#FBDC8E"></stop> <stop className="ccompli2" offset="1" stopColor="#FB958E"></stop>
                                             </linearGradient>
                                         </defs>
                                     </svg>
@@ -143,7 +143,7 @@ const PDFViewer = ({ dataJSON, logo, printRef }) => {
                     .body .client-info p:not(:last-child) {
                         margin-bottom: 0.5rem;
                     }
-                    .body .body-pages label {
+                    .body .body-pages {
                         text-transform: capitalize;
                     }
                     .body .body-pages ul {
@@ -156,9 +156,13 @@ const PDFViewer = ({ dataJSON, logo, printRef }) => {
 };
 
 const PageList = ({ pk, data }) => {
+    const fixLabel = (label) => {
+        return label.replaceAll("_", " ");
+    };
+    
     return (
         <div>
-            <label>{isNaN(pk) ? pk : "# Data " + pk}</label>
+            <label>{isNaN(pk) ? fixLabel(pk) : "# Data " + fixLabel(pk)}</label>
             {Array.isArray(data[pk]) && (
                 <ul>
                     {data[pk].map((pkitem) => (
@@ -170,7 +174,7 @@ const PageList = ({ pk, data }) => {
                 <ul>
                     {Object.keys(data[pk]).map((pkitem) => (
                         <li key={pkitem}>
-                            {pkitem}: {data[pk][pkitem]}
+                            {fixLabel(pkitem)}: {data[pk][pkitem]}
                         </li>
                     ))}
                 </ul>
