@@ -9,6 +9,7 @@ const Home = () => {
     const [json, setJSON] = useState();
     const [valid, setValid] = useState(true);
     const [settings, setSettings] = useState({
+        name: 'Report',
         titleFont: "Arial",
         titleFontSize: 18,
         bodyFont: "Arial",
@@ -39,6 +40,10 @@ const Home = () => {
             };
         }
     };
+
+    const handleNameChange = (e) => {
+        setSettings({ ...settings, name: e.target.value });
+    }
 
     const handleLogoChange = (e) => {
         if (e.target.files) {
@@ -118,10 +123,10 @@ const Home = () => {
                 </section>
                 <section className="configure">
                     <h2>Configure</h2>
-                    {/* <div className="form-input">
+                    <div className="form-input">
                         <label htmlFor="name">Document Name</label>
-                        <input type="text" id="name" name="name"></input>
-                    </div> */}
+                        <input type="text" id="name" name="name" onChange={handleNameChange}></input>
+                    </div>
                     <div className="form-input">
                         <label htmlFor="logo">Logo</label>
                         <input type="file" id="logo" name="logo" accept="image/png,image/jpeg" onChange={handleLogoChange}></input>
@@ -153,7 +158,7 @@ const Home = () => {
                         <input type="number" id="body-size" name="body-size" onChange={handleBodyFontSizeChange}></input>
                     </div>
                     <div className="form-input label">
-                        <label>Magin</label>
+                        <label>Margin</label>
                     </div>
                     <div className="form-input">
                         <label>Margin Top (px)</label>
@@ -175,7 +180,7 @@ const Home = () => {
                 <section className="generate">
                     <h2>Generate</h2>
                     <PDFViewer printRef={(el) => (printComponentRef = el)} dataJSON={json} settings={settings} />
-                    {json ? <ReactToPrint trigger={() => <button>Generate PDF</button>} content={() => printComponentRef} /> : <button>Generate PDF</button>}
+                    {json ? <ReactToPrint documentTitle={settings.name} trigger={() => <button>Generate PDF</button>} content={() => printComponentRef} /> : <button>Generate PDF</button>}
                 </section>
             </main>
 
