@@ -12,7 +12,11 @@ const Home = () => {
         titleFont: "Arial",
         titleFontSize: 18,
         bodyFont: "Arial",
-        bodyFontSize: 14
+        bodyFontSize: 14,
+        paddingTop: 1,
+        paddingRight: 0.8,
+        paddingBottom: 0.8,
+        paddingLeft: 1,
     });
 
     let printComponentRef = useRef();
@@ -65,6 +69,23 @@ const Home = () => {
         setSettings({ ...settings, bodyFontSize: e.target.value });
     };
 
+    const handleMarginChange = (e, pos) => {
+        switch (pos) {
+            case "top":
+                setSettings({ ...settings, paddingTop: e.target.value });
+                break;
+            case "right":
+                setSettings({ ...settings, paddingRight: e.target.value });
+                break;
+            case "bottom":
+                setSettings({ ...settings, paddingBottom: e.target.value });
+                break;
+            case "left":
+                setSettings({ ...settings, paddingLeft: e.target.value });
+                break;
+        }
+    };
+
     const editorOnChange = (value) => {
         try {
             JSON.parse(value);
@@ -87,20 +108,20 @@ const Home = () => {
                     <h1 className={styles.title}>JSON to PDF</h1>
                 </section>
                 <section className="file-form">
-                    <h3>Select File</h3>
+                    <h2>Select File</h2>
                     <input type="file" id="myFile" name="filename" accept="application/json" onChange={handleFileChange}></input>
                     {!valid && <p className="warning">Not a valid JSON</p>}
                 </section>
                 <section className="json-editor">
-                    <h3>JSON Editor</h3>
+                    <h2>JSON Editor</h2>
                     <Editor height="20rem" defaultLanguage="json" theme="vs-dark" value={json} onChange={editorOnChange} />
                 </section>
                 <section className="configure">
-                    <h3>Configure</h3>
-                    <div className="form-input">
+                    <h2>Configure</h2>
+                    {/* <div className="form-input">
                         <label htmlFor="name">Document Name</label>
                         <input type="text" id="name" name="name"></input>
-                    </div>
+                    </div> */}
                     <div className="form-input">
                         <label htmlFor="logo">Logo</label>
                         <input type="file" id="logo" name="logo" accept="image/png,image/jpeg" onChange={handleLogoChange}></input>
@@ -131,9 +152,28 @@ const Home = () => {
                         <label>Font Size (px)</label>
                         <input type="number" id="body-size" name="body-size" onChange={handleBodyFontSizeChange}></input>
                     </div>
+                    <div className="form-input label">
+                        <label>Magin</label>
+                    </div>
+                    <div className="form-input">
+                        <label>Margin Top (px)</label>
+                        <input type="number" step="0.1" id="margin-top" name="margin-top" onChange={(e) => handleMarginChange(e, "top")}></input>
+                    </div>
+                    <div className="form-input">
+                        <label>Margin Right (px)</label>
+                        <input type="number" step="0.1" id="margin-right" name="margin-right" onChange={(e) => handleMarginChange(e, "right")}></input>
+                    </div>
+                    <div className="form-input">
+                        <label>Margin Bottom (px)</label>
+                        <input type="number" step="0.1" id="margin-bottom" name="margin-bottom" onChange={(e) => handleMarginChange(e, "bottom")}></input>
+                    </div>
+                    <div className="form-input">
+                        <label>Margin Left (px)</label>
+                        <input type="number" step="0.1" id="margin-left" name="margin-left" onChange={(e) => handleMarginChange(e, "left")}></input>
+                    </div>
                 </section>
                 <section className="generate">
-                    <h3>Generate</h3>
+                    <h2>Generate</h2>
                     <PDFViewer printRef={(el) => (printComponentRef = el)} dataJSON={json} settings={settings} />
                     {json ? <ReactToPrint trigger={() => <button>Generate PDF</button>} content={() => printComponentRef} /> : <button>Generate PDF</button>}
                 </section>
@@ -222,7 +262,7 @@ const Home = () => {
                     margin-top: 1rem;
                 }
                 .form-input.label {
-                    text-decoration: underline;
+                    font-weight: bold;
                 }
             `}</style>
 
@@ -244,7 +284,9 @@ const Home = () => {
 const FontOption = () => {
     return (
         <>
-            <option value="Arial" selected={true}>Arial</option>
+            <option value="Arial" selected={true}>
+                Arial
+            </option>
             <option value="Verdana">Verdana</option>
             <option value="Trebuchet MS">Trebuchet MS</option>
             <option value="Georgia">Georgia</option>

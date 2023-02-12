@@ -7,7 +7,16 @@ const PDFViewer = ({ dataJSON, settings, printRef }) => {
         dataJSON && (
             <>
                 <div className="pdf-viewer">
-                    <div className="pdf-letter" ref={printRef}>
+                    <div
+                        className="pdf-letter"
+                        ref={printRef}
+                        style={{
+                            paddingTop: `${settings.paddingTop}cm`,
+                            paddingRight: `${settings.paddingRight}cm`,
+                            paddingBottom: `${settings.paddingBottom}cm`,
+                            paddingLeft: `${settings.paddingLeft}cm`,
+                        }}
+                    >
                         <div className="header">
                             <div className="logo">
                                 {settings.logo ? (
@@ -114,8 +123,6 @@ const PDFViewer = ({ dataJSON, settings, printRef }) => {
                         display: inline-block;
                         width: 210mm;
                         min-height: 297mm;
-                        padding: 40px 30px 30px 40px;
-                        // transform: scale(0.7);
                         background: #fff;
                     }
                     .header {
