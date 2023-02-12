@@ -62,20 +62,24 @@ const PDFViewer = ({ dataJSON, settings, printRef }) => {
                                 )}
                             </div>
                             <div className="info">
-                                <h3 className="title">{jsonObject.report?.title}</h3>
-                                <p className="date">{jsonObject.report?.date}</p>
+                                <h3 className="title" style={{ fontFamily: `"${settings.titleFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.titleFontSize}px` }}>
+                                    {jsonObject.report?.title}
+                                </h3>
+                                <p className="date" style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>
+                                    {jsonObject.report?.date}
+                                </p>
                             </div>
                         </div>
                         <div className="body">
                             <div className="client-info">
                                 {jsonObject.report?.client?.contact ? (
                                     <>
-                                        <p>Client Name: {jsonObject.report.client.contact.name}</p>
-                                        <p>Email: {jsonObject.report.client.contact.email}</p>
-                                        <p>Phone: {jsonObject.report.client.contact.phone}</p>
+                                        <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>Client Name: {jsonObject.report.client.contact.name}</p>
+                                        <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>Email: {jsonObject.report.client.contact.email}</p>
+                                        <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>Phone: {jsonObject.report.client.contact.phone}</p>
                                         {jsonObject.report.client.contact.address && (
                                             <>
-                                                <p>
+                                                <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>
                                                     Address: {jsonObject.report.client.contact.address.street}, {jsonObject.report.client.contact.address.city}, {jsonObject.report.client.contact.address.state}, {jsonObject.report.client.contact.address.zip}
                                                 </p>
                                             </>
@@ -83,16 +87,16 @@ const PDFViewer = ({ dataJSON, settings, printRef }) => {
                                     </>
                                 ) : (
                                     <>
-                                        <p>Client Name: {jsonObject.report?.client?.name}</p>
-                                        <p>Account Number: {jsonObject.report?.client?.account_number}</p>
+                                        <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>Client Name: {jsonObject.report?.client?.name}</p>
+                                        <p style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>Account Number: {jsonObject.report?.client?.account_number}</p>
                                     </>
                                 )}
                             </div>
                             <div className="body-pages">
                                 {jsonObject.report?.pages?.map((page) => (
                                     <div key={page.page}>
-                                        {page.data && Object.keys(page.data).map((pk) => <PageList key={pk} pk={pk} data={page.data} />)}
-                                        {page.summary && Object.keys(page.summary).map((pk) => <PageList key={pk} pk={pk} data={page.summary} />)}
+                                        {page.data && Object.keys(page.data).map((pk) => <PageList key={pk} pk={pk} data={page.data} settings={settings} />)}
+                                        {page.summary && Object.keys(page.summary).map((pk) => <PageList key={pk} pk={pk} data={page.summary} settings={settings} />)}
                                     </div>
                                 ))}
                             </div>
@@ -155,25 +159,27 @@ const PDFViewer = ({ dataJSON, settings, printRef }) => {
     );
 };
 
-const PageList = ({ pk, data }) => {
+const PageList = ({ pk, data, settings }) => {
     const fixLabel = (label) => {
         return label.replaceAll("_", " ");
     };
-    
+
     return (
-        <div>
-            <label>{isNaN(pk) ? fixLabel(pk) : "# Data " + fixLabel(pk)}</label>
+        <div style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>
+            <label style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>{isNaN(pk) ? fixLabel(pk) : "# Data " + fixLabel(pk)}</label>
             {Array.isArray(data[pk]) && (
                 <ul>
                     {data[pk].map((pkitem) => (
-                        <li key={pkitem}>{pkitem}</li>
+                        <li key={pkitem} style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>
+                            {pkitem}
+                        </li>
                     ))}
                 </ul>
             )}
             {typeof data[pk] === "object" && !Array.isArray(data[pk]) && data[pk] !== null && (
                 <ul>
                     {Object.keys(data[pk]).map((pkitem) => (
-                        <li key={pkitem}>
+                        <li key={pkitem} style={{ fontFamily: `"${settings.bodyFont}", Arial, Helvetica, sans-serif`, fontSize: `${settings.bodyFontSize}px` }}>
                             {fixLabel(pkitem)}: {data[pk][pkitem]}
                         </li>
                     ))}

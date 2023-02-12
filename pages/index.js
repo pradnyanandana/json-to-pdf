@@ -8,7 +8,12 @@ import ReactToPrint from "react-to-print";
 const Home = () => {
     const [json, setJSON] = useState();
     const [valid, setValid] = useState(true);
-    const [settings, setSettings] = useState({});
+    const [settings, setSettings] = useState({
+        titleFont: "Arial",
+        titleFontSize: 18,
+        bodyFont: "Arial",
+        bodyFontSize: 14
+    });
 
     let printComponentRef = useRef();
 
@@ -44,6 +49,22 @@ const Home = () => {
         }
     };
 
+    const handleTitleFontChange = (e) => {
+        setSettings({ ...settings, titleFont: e.target.value });
+    };
+
+    const handleTitleFontSizeChange = (e) => {
+        setSettings({ ...settings, titleFontSize: e.target.value });
+    };
+
+    const handleBodyFontChange = (e) => {
+        setSettings({ ...settings, bodyFont: e.target.value });
+    };
+
+    const handleBodyFontSizeChange = (e) => {
+        setSettings({ ...settings, bodyFontSize: e.target.value });
+    };
+
     const editorOnChange = (value) => {
         try {
             JSON.parse(value);
@@ -77,12 +98,38 @@ const Home = () => {
                 <section className="configure">
                     <h3>Configure</h3>
                     <div className="form-input">
-                        <label>Document Name</label>
-                        <input type="text"></input>
+                        <label htmlFor="name">Document Name</label>
+                        <input type="text" id="name" name="name"></input>
                     </div>
                     <div className="form-input">
-                        <label>Logo</label>
+                        <label htmlFor="logo">Logo</label>
                         <input type="file" id="logo" name="logo" accept="image/png,image/jpeg" onChange={handleLogoChange}></input>
+                    </div>
+                    <div className="form-input label">
+                        <label>Title Typography</label>
+                    </div>
+                    <div className="form-input">
+                        <label htmlFor="title-font">Font</label>
+                        <select id="title-font" onChange={handleTitleFontChange}>
+                            <FontOption />
+                        </select>
+                    </div>
+                    <div className="form-input">
+                        <label>Font Size (px)</label>
+                        <input type="number" id="title-size" name="title-size" onChange={handleTitleFontSizeChange}></input>
+                    </div>
+                    <div className="form-input label">
+                        <label>Body Typography</label>
+                    </div>
+                    <div className="form-input">
+                        <label htmlFor="body-font">Font</label>
+                        <select id="body-font" onChange={handleBodyFontChange}>
+                            <FontOption />
+                        </select>
+                    </div>
+                    <div className="form-input">
+                        <label>Font Size (px)</label>
+                        <input type="number" id="body-size" name="body-size" onChange={handleBodyFontSizeChange}></input>
                     </div>
                 </section>
                 <section className="generate">
@@ -174,6 +221,9 @@ const Home = () => {
                     display: block;
                     margin-top: 1rem;
                 }
+                .form-input.label {
+                    text-decoration: underline;
+                }
             `}</style>
 
             <style jsx global>{`
@@ -188,6 +238,20 @@ const Home = () => {
                 }
             `}</style>
         </div>
+    );
+};
+
+const FontOption = () => {
+    return (
+        <>
+            <option value="Arial" selected={true}>Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Trebuchet MS">Trebuchet MS</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Brush Script MT">Brush Script MT</option>
+            <option value="Impact">Impact</option>
+        </>
     );
 };
 
